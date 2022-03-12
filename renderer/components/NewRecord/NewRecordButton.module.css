@@ -1,0 +1,25 @@
+.add-btn {
+  position: fixed;
+  border: none;
+  outline: none;
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+  background-color: #002766;
+  border-radius: 100%;
+  color: #eee;
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+}
+
+.add-btn:hover {
+  background-color: #096dd9;
+  transition: all 0.2s ease-in-out;
+}

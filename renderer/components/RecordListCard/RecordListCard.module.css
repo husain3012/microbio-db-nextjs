@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+.left-section {
+  padding: 10px;
+}
+.barcode-container svg {
+  width: 200px;
+}
+.middle-section {
+  width: 80%;
+  padding: 0 20px;
+  border-left: 1px solid #ccc;
+}
+.right-section {
+  width: 20%;
+  
+}
+
+.details span {
+  font-size: 1rem;
+  color: #262626;
+}

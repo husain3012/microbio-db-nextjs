@@ -1,46 +1,23 @@
-import { useState, useEffect } from 'react'
-
+import React, { useState, useEffect, useContext } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "../recoil/auth";
 const Home = () => {
-  const [input, setInput] = useState('')
-  const [message, setMessage] = useState(null)
+  const router = useRouter();
 
-  useEffect(() => {
-    const handleMessage = (event, message) => setMessage(message)
-    window.electron.message.on(handleMessage)
+  const user = useRecoilValue(authAtom);
+  console.log(user);
 
-    return () => {
-      window.electron.message.off(handleMessage)
-    }
-  }, [])
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    window.electron.message.send(input)
-    setMessage(null)
-  }
-
-  return (
+  return user ? (
     <div>
-      <h1>Hello Electron!</h1>
-
-      {message && <p>{message}</p>}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-      </form>
-
-      <style jsx>{`
-        h1 {
-          color: red;
-          font-size: 50px;
-        }
-      `}</style>
+      <h1>Home</h1>
+      <Link href="/records">Records</Link>
     </div>
-  )
-}
+  ) : (
+    <h1>404</h1>
+  );
+};
 
-export default Home
+export default Home;

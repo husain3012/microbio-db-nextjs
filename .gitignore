@@ -32,3 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# databases
+*.sqlite
+*.sqlite3
+*.sqlite
+*.sqlite-journal
