@@ -1,26 +1,25 @@
-.container{
-    width: 80%;
-    min-width: 720px;
-    max-width: 1200px;
-    margin: auto ;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.container {
+  width: 80%;
+  min-width: 720px;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-
 .sensitivities-selector {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  /* justify-content: end; */
-  /* max-width: 80%; */
-  margin: 0 auto;
-  margin-left: auto;
 }
 
 .sensitivity-option {
   display: flex;
   flex-direction: column;
   margin: 0 12px;
+}
+.panel-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  height: 500px;
 }

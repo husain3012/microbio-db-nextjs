@@ -5,14 +5,13 @@ const sampleSchema = sequelize.define("sample", {
   sample_id: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
   },
   patientName: {
     type: Sequelize.STRING,
     allowNull: false,
   },
   age: {
-    type: Sequelize.NUMBER,
+    type: Sequelize.FLOAT,
     allowNull: false,
   },
   sex: {
@@ -39,7 +38,7 @@ const sampleSchema = sequelize.define("sample", {
   },
   examRequired: {
     type: Sequelize.STRING,
-  },
+},
   progress: {
     type: Sequelize.STRING,
   },

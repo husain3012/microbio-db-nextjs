@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { List, message, Avatar, Skeleton, Divider } from "antd";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { List, message, Avatar, Skeleton, Divider, Switch } from "antd";
 import axios from "axios";
-import RecordListCard from "../../components/RecordListCard/RecordListCard";
 import ProtectedLayout from "../../components/Layout/ProtectedLayout";
+import ListView from "../../components/Records/ListView/ListView";
+import TabularView from "../../components/Records/TabularView/TabularView";
 const Records = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [lastFetched, setLastFetched] = useState(dateRanges());
-  const [hasMore, setHasMore] = useState(true);
+  const [totalSamples, setTotalSamples] = useState(true);
+  const [tableView, setTableView] = useState(true);
 
   const loadMoreData = async () => {
     if (loading) {
@@ -25,8 +26,9 @@ const Records = () => {
       console.log(resp.data);
 
       if (resp.status === 200 && resp.data) {
-        if (resp.data.length > 0) {
-          setData([...data, ...resp.data]);
+        if (resp.data.totalSamples > 0) {
+          setData([...data, ...resp.data.foundSamples]);
+          setTotalSamples(resp.data.totalSamples);
           setLastFetched((last) => {
             return dateRanges(last.startDate);
           });
@@ -46,10 +48,17 @@ const Records = () => {
     loadMoreData();
   }, []);
 
+  const toggleViewHandler = (e) => {
+    setTableView(e);
+  };
+
   return (
     <ProtectedLayout>
       <div>
-        <div>
+        <div style={{ padding: "20px 0" }}>
+          <h2 style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "auto", width: "200px" }}>
+            Tabular View: <Switch onChange={toggleViewHandler} checkedChildren="On" unCheckedChildren="Off" defaultChecked />
+          </h2>
           <h3>
             <b>Records</b>
             {data.length > 0 && (
@@ -63,33 +72,10 @@ const Records = () => {
             )}
           </h3>
         </div>
-        <div
-          id="scrollableDiv"
-          style={{
-            height: "80vh",
-            overflow: "auto",
-            padding: "0 16px",
-            border: "1px solid rgba(140, 140, 140, 0.35)",
-          }}
-        >
-          <InfiniteScroll
-            dataLength={data.length}
-            next={loadMoreData}
-            hasMore={hasMore}
-            loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-            scrollableTarget="scrollableDiv"
-          >
-            <List
-              dataSource={data}
-              renderItem={(item) => (
-                <List.Item style={{ padding: "0" }} key={item.sample_id}>
-                  <RecordListCard sample={item} />
-                </List.Item>
-              )}
-            />
-          </InfiniteScroll>
-        </div>
+        {
+          tableView ? <TabularView data={data} loadMoreData={loadMoreData} totalSamples={totalSamples} /> : <ListView data={data} loadMoreData={loadMoreData} totalSamples={totalSamples} />
+        }
+        
       </div>
     </ProtectedLayout>
   );

@@ -5,6 +5,7 @@ import ProtectedLayout from "../Layout/ProtectedLayout";
 import classes from "./NewRecordForm.module.css";
 import openNotificationWith from "../../utils/notification";
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
 const { Option } = Select;
 const { TextArea } = Input;
 const { Step } = Steps;
@@ -29,19 +30,21 @@ const NewRecordForm = (props) => {
   };
 
   const formFinishHandler = async (values) => {
+    console.log(values);
     const transformedValues = {
       sample_id: values.sample_id,
       patientName: values.patientName,
-      age: values.age,
+      age: parseFloat(values.age) / values.ageUnit,
       sex: values.sex,
       specimen: values.specimen === "other" ? values.specimenOther : values.specimen,
-      sampleDate: values.sampleDate,
+      sampleDate: values.sampleDate.toISOString(),
       department: values.department,
       physician: values.physician,
       examRequired: values.examRequired,
     };
 
     console.log(transformedValues);
+
     const resp = await sendData("/api/sample/create", "POST", transformedValues);
     console.log(resp);
     if (resp.status === 201) {
@@ -69,6 +72,8 @@ const NewRecordForm = (props) => {
           initialValues={{
             specimen: "urine",
             specimenOther: "",
+            ageUnit: 1,
+            sampleDate: dayjs()
           }}
         >
           <Form.Item label="Sample ID" name="sample_id" rules={[{ required: true, message: "Please input your username!" }]}>
@@ -79,8 +84,39 @@ const NewRecordForm = (props) => {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Age" name="age" rules={[{ required: true, message: "Please input your password!" }]}>
-            <Input type="number" />
+          <Form.Item label="Age" className={classes["age-field"]}>
+            <Form.Item
+              name="age"
+              style={{
+                display: "inline-block",
+              }}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <span
+              style={{
+                display: "inline-block",
+                width: "24px",
+                lineHeight: "32px",
+                textAlign: "center",
+              }}
+            >
+              in
+            </span>
+
+            <Form.Item
+              name="ageUnit"
+              style={{
+                display: "inline-block",
+                width: "200px",
+              }}
+            >
+              <Radio.Group size="small">
+                <Radio.Button value={1}>Y</Radio.Button>
+                <Radio.Button value={12}>M</Radio.Button>
+                <Radio.Button value={365.25}>D</Radio.Button>
+              </Radio.Group>
+            </Form.Item>
           </Form.Item>
 
           <Form.Item label="Sex" name="sex">

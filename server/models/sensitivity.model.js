@@ -23,7 +23,7 @@
 //   },
 //   streptococussName: {
 //     type: Sequelize.STRING,
-//   },
+//   },]]
 //   streptococussPanel: {
 //     type: Sequelize.ARRAY(Sequelize.STRING),
 //   },

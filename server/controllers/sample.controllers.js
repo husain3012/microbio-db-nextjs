@@ -23,7 +23,7 @@ exports.createSample = async (req, res) => {
     sex: req.body.sex,
     cadsNumber: req.body.cadsNumber,
     specimen: req.body.specimen,
-    sampleDate: req.body.specimenDate,
+    sampleDate: req.body.sampleDate,
     department: req.body.department,
     physician: req.body.physician,
     diagnosis: req.body.diagnosis,
@@ -58,6 +58,7 @@ exports.updateSample = async (req, res) => {
       data: sample,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       status: false,
       message: error.message,
@@ -90,9 +91,10 @@ exports.getByDate = async (req, res) => {
   past.setMonth(today.getMonth() - 3);
   const startDate = req.query.startDate ? new Date(req.query.startDate) : past;
   const endDate = req.query.endDate ? new Date(req.query.endDate) : today;
-  
 
   try {
+    // get total number of samples in database:
+    const totalSamples = await Sample.count();
     const foundSamples = await Sample.findAll({
       where: {
         createdAt: { [Op.between]: [startDate, endDate] },
@@ -100,7 +102,7 @@ exports.getByDate = async (req, res) => {
       limit: req.query.limit || 10,
       order: [["createdAt", "DESC"]],
     });
-    return res.json(foundSamples);
+    return res.json({ foundSamples, totalSamples });
   } catch (error) {
     console.log(err);
     return res.status(500).send(err);
